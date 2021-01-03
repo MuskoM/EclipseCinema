@@ -1,11 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/App/App';
+import {createStore} from 'redux';
+import movies from './reducers/movieReducer'
+import { connect, Provider } from 'react-redux';
+import App from './containers/HomePageContainer';
 import reportWebVitals from './reportWebVitals';
 
+const store = createStore(movies)
+
+const mapStateToProps = (state) =>{
+  return {...state};
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return{
+    showAllMovies: ()=> dispatch(
+      {type: "SHOW_ALL_MOVIES"}),
+    addMovie: (new_movie)=> dispatch(
+      {type: "ADD_MOVIE",data:new_movie}),
+    editMovie: (updated_movie,id)=> dispatch(
+      {type: "EDIT_MOVIE",data:updated_movie,id:id})
+  }
+};
+
+const ManageMovies = connect(mapStateToProps,mapDispatchToProps)(App);
 ReactDOM.render(
-    <App />,
+    <Provider store={store}>
+      <ManageMovies/>
+    </Provider>,
   document.getElementById('root')
 );
 
